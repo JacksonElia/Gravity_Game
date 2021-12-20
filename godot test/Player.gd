@@ -16,6 +16,15 @@ var gravity_vector = Vector2(0, -1)
 var movement_vector = Vector2(0, 0)
 
 func _physics_process(delta):
+	if Input.is_action_just_pressed("gravity_up"):
+		gravity_dir = "up"
+	if Input.is_action_just_pressed("gravity_right"):
+		gravity_dir = "right"
+	if Input.is_action_just_pressed("gravity_down"):
+		gravity_dir = "down"
+	if Input.is_action_just_pressed("gravity_left"):
+		gravity_dir = "left"
+	
 	var move_dir = 0
 	if Input.is_action_pressed("move_right"):
 		move_dir += 1
