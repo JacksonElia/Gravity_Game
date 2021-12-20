@@ -11,6 +11,7 @@ onready var sprite = $Sprite
 var y_velo = 0
 var x_velo = 0
 var facing_right = false
+var gravity_dir = [0, 1]
 
 func _physics_process(delta):
 	var move_dir = 0
@@ -20,16 +21,17 @@ func _physics_process(delta):
 		move_dir -= 1
 	x_velo = move_dir * MOVE_SPEED
 	
-	move_and_slide(Vector2(x_velo, y_velo), Vector2(0, -1))
-	
 	var grounded = is_on_floor()
-	y_velo += GRAVITY
+	y_velo += gravity_dir[1] * GRAVITY
+	x_velo += gravity_dir[0] * GRAVITY
 	if grounded and Input.is_action_just_pressed("jump"):
 		y_velo = -JUMP_FORCE
 	if grounded and y_velo >= 0:
 		y_velo = 5
 	if y_velo > MAX_FALL_SPEED:
 		y_velo = MAX_FALL_SPEED
+	
+	move_and_slide(Vector2(x_velo, y_velo), Vector2(0, -1))
 	
 	if facing_right and move_dir < 0:
 		flip()
