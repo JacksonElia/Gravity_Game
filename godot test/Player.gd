@@ -11,6 +11,9 @@ onready var sprite = $Sprite
 var y_velo = 0
 var x_velo = 0
 var facing_right = false
+var gravity_dir = "down"
+var gravity_vector = Vector2(0, -1)
+var movement_vector = Vector2(0, 0)
 
 func _physics_process(delta):
 	var move_dir = 0
@@ -20,7 +23,14 @@ func _physics_process(delta):
 		move_dir -= 1
 	x_velo = move_dir * MOVE_SPEED
 	
-	move_and_slide(Vector2(x_velo, y_velo), Vector2(0, -1))
+	gravity_vector = {"down": Vector2(0, -1), "up": Vector2(0, 1), "left": Vector2(-1, 0), "right": Vector2(1, 0)}[gravity_dir]
+	movement_vector = {
+		"down": Vector2(x_velo, y_velo),
+		"up": Vector2(-x_velo, -y_velo),
+		"left": Vector2(y_velo, x_velo),
+		"right": Vector2(-y_velo, -x_velo)
+	}[gravity_dir]
+	move_and_slide(movement_vector, gravity_vector)
 	
 	var grounded = is_on_floor()
 	y_velo += GRAVITY
