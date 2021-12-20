@@ -9,6 +9,7 @@ onready var anim_player = $AnimationPlayer
 onready var sprite = $Sprite
 
 var y_velo = 0
+var x_velo = 0
 var facing_right = false
 
 func _physics_process(delta):
@@ -17,8 +18,9 @@ func _physics_process(delta):
 		move_dir += 1
 	if Input.is_action_pressed("move_left"):
 		move_dir -= 1
+	x_velo = move_dir * MOVE_SPEED
 	
-	move_and_slide(Vector2(move_dir * MOVE_SPEED, y_velo), Vector2(0, -1))
+	move_and_slide(Vector2(x_velo, y_velo), Vector2(0, -1))
 	
 	var grounded = is_on_floor()
 	y_velo += GRAVITY
