@@ -11,7 +11,7 @@ onready var sprite = $Sprite
 var y_velo = 0
 var x_velo = 0
 var facing_right = false
-var gravity_dir = [0, 1]
+var gravity_dir = [1, 0]
 
 func _physics_process(delta):
 	var move_dir = 0
@@ -19,13 +19,19 @@ func _physics_process(delta):
 		move_dir += 1
 	if Input.is_action_pressed("move_left"):
 		move_dir -= 1
-	x_velo = move_dir * MOVE_SPEED
+	if gravity_dir[0] == 0:
+		x_velo = move_dir * MOVE_SPEED
+	elif gravity_dir[1] == 0:
+		y_velo = move_dir * MOVE_SPEED
 	
 	var grounded = is_on_floor()
 	y_velo += gravity_dir[1] * GRAVITY
 	x_velo += gravity_dir[0] * GRAVITY
 	if grounded and Input.is_action_just_pressed("jump"):
-		y_velo = -JUMP_FORCE
+		if gravity_dir[0] == 0:
+			y_velo = -JUMP_FORCE * gravity_dir[1]
+		elif gravity_dir[1] == 0:
+			x_velo = JUMP_FORCE * gravity_dir[0]
 	if grounded and y_velo >= 0:
 		y_velo = 5
 	if y_velo > MAX_FALL_SPEED:
